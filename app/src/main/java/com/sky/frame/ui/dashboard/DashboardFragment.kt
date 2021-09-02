@@ -1,41 +1,35 @@
 package com.sky.frame.ui.dashboard
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.sky.frame.R
+import com.sky.frame.base.BaseFragment
 import com.sky.frame.databinding.FragmentDashboardBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-class DashboardFragment : Fragment() {
+@AndroidEntryPoint
+class DashboardFragment : BaseFragment<FragmentDashboardBinding>() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private val dashboardViewModel: DashboardViewModel by viewModels()
     private var _binding: FragmentDashboardBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
+    override fun getLayout(): Int {
+        return R.layout.fragment_dashboard
+    }
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
+    override fun initView() {
+        _binding = mBinding
         val textView: TextView = binding.textDashboard
         dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
-        return root
+
+    }
+
+    override fun initData() {
+
     }
 
     override fun onDestroyView() {

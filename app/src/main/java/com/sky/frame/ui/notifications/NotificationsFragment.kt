@@ -1,41 +1,34 @@
 package com.sky.frame.ui.notifications
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.sky.frame.R
+import com.sky.frame.base.BaseFragment
 import com.sky.frame.databinding.FragmentNotificationsBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-class NotificationsFragment : Fragment() {
+@AndroidEntryPoint
+class NotificationsFragment : BaseFragment<FragmentNotificationsBinding>() {
 
-    private lateinit var notificationsViewModel: NotificationsViewModel
+    private val notificationsViewModel: NotificationsViewModel by viewModels()
     private var _binding: FragmentNotificationsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        notificationsViewModel =
-            ViewModelProvider(this).get(NotificationsViewModel::class.java)
+    override fun getLayout(): Int {
+        return R.layout.fragment_notifications
+    }
 
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
+    override fun initView() {
+        _binding = mBinding
         val textView: TextView = binding.textNotifications
         notificationsViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
-        return root
+    }
+
+    override fun initData() {
+
     }
 
     override fun onDestroyView() {
